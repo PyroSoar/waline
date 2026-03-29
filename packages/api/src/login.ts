@@ -66,6 +66,14 @@ export const login = ({
   const left = (window.innerWidth - width) / 2;
   const top = (window.innerHeight - height) / 2;
 
+  // Get OAuth URL from config or use default
+  const oauthCenterUrl = serverURL.replace(/\/$/, '') + '/api/oauth';
+  const redirectUrl = encodeURIComponent(location.href);
+  const state = Math.random().toString(36).substring(2, 15);
+
+  // Store state in sessionStorage for verification
+  sessionStorage.setItem('oauth_state', state);
+
   if (isMobile()) {
     location.href = `${serverURL.replace(/\/$/, '')}/ui/login?lng=${encodeURIComponent(lang)}&redirect=${encodeURIComponent(location.href)}`;
 
@@ -82,8 +90,6 @@ export const login = ({
     '_blank',
     `width=${width},height=${height},left=${left},top=${top},scrollbars=no,resizable=no,status=no,location=no,toolbar=no,menubar=no`,
   );
-
-  handler?.postMessage({ type: 'TOKEN', data: null }, '*');
 
   return new Promise((resolve) => {
     // oxlint-disable-next-line typescript/no-explicit-any

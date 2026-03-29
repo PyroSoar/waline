@@ -1,6 +1,6 @@
 {
-  "name": "@waline/vercel",
-  "version": "1.39.3",
+  "name": "@pyrosoar/waline-vercel",
+  "version": "1.39.4-beta.1",
   "description": "vercel server for waline comment system",
   "keywords": [
     "blog",
@@ -11,11 +11,11 @@
   "license": "MIT",
   "author": "lizheming <i@imnerd.org>",
   "repository": {
-    "url": "https://github.com/walinejs/waline",
+    "url": "https://github.com/pyrosoar/waline",
     "directory": "packages/server"
   },
   "publishConfig": {
-    "provenance": true
+    "access": "public"
   },
   "scripts": {
     "dev": "node development.js 9090"

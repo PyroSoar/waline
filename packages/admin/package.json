@@ -1,6 +1,6 @@
 {
-  "name": "@waline/admin",
-  "version": "0.31.0",
+  "name": "@pyrosoar/waline-admin",
+  "version": "0.31.1-beta.4",
   "description": "management system for waline",
   "keywords": [
     "comment",
@@ -9,14 +9,14 @@
     "valine",
     "waline"
   ],
-  "homepage": "https://github.com/walinejs/waline#readme",
+  "homepage": "https://github.com/pyrosoar/waline#readme",
   "bugs": {
-    "url": "https://github.com/walinejs/waline/issues"
+    "url": "https://github.com/pyrosoar/waline/issues"
   },
   "license": "MIT",
   "author": "lizheming <i@imnerd.org>",
   "repository": {
-    "url": "https://github.com/walinejs/waline.git",
+    "url": "https://github.com/pyrosoar/waline.git",
     "directory": "packages/admin"
   },
   "files": [
@@ -27,10 +27,10 @@
   "browser": "dist/admin.js",
   "exports": "./dist/admin.js",
   "publishConfig": {
-    "provenance": true
+    "access": "public"
   },
   "scripts": {
-    "build": "NODE_ENV=production vite build",
+    "build": "cross-env NODE_ENV=production vite build",
     "clean": "rimraf ./dist",
     "dev": "vite",
     "prepublishOnly": "pnpm build"

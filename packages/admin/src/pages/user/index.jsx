@@ -179,23 +179,26 @@ export default function User() {
                                 {user.email}
                               </a>
                               <br />
-                              {socials.map((social) => (
-                                <a
-                                  key={social}
-                                  href={
-                                    user[social] && social !== 'oidc'
-                                      ? `https://${social}.com/${user[social]}`
-                                      : ``
-                                  }
-                                  target={user[social] ? '_blank' : '_self'}
-                                  rel="noreferrer"
-                                  className={cls('account-item', 'user-page-account-item', social, {
-                                    bind: user[social],
-                                  })}
-                                >
-                                  {React.createElement(Icons[social])}
-                                </a>
-                              ))}
+                              {socials.map((social) => {
+                                const iconKey = social.replace(/-/g, '_');
+                                return (
+                                  <a
+                                    key={social}
+                                    href={
+                                      user[social] && social !== 'oidc'
+                                        ? `https://${social}.com/${user[social]}`
+                                        : ``
+                                    }
+                                    target={user[social] ? '_blank' : '_self'}
+                                    rel="noreferrer"
+                                    className={cls('account-item', 'user-page-account-item', social, {
+                                      bind: user[social],
+                                    })}
+                                  >
+                                    {React.createElement(Icons[iconKey])}
+                                  </a>
+                                );
+                              })}
                             </td>
                             <td>{getRole(user.type)}</td>
                             <td>{user.label}</td>

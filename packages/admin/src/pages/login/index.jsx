@@ -27,6 +27,19 @@ export default function Login() {
   const query = new URLSearchParams(location.search);
 
   useEffect(() => {
+    // Check for token in URL
+    const tokenFromUrl = query.get('token');
+    if (tokenFromUrl) {
+      window.TOKEN = tokenFromUrl;
+      sessionStorage.setItem('TOKEN', tokenFromUrl);
+      // Load user info with the token
+      dispatch.user.loadUserInfo();
+      // Remove token from URL
+      const newUrl = location.pathname + location.search.replace(/[?&]token=[^&]+/, '').replace(/^&/, '?');
+      window.history.replaceState({}, '', newUrl);
+      return;
+    }
+
     if (!user || !user.objectId) {
       return;
     }
@@ -37,7 +50,7 @@ export default function Login() {
     const redirect = isAdmin && query.get('redirect') ? query.get('redirect') : defaultRedirect;
 
     navigate(redirect.replaceAll(/\/+/g, '/'));
-  }, [user]);
+  }, [user, dispatch]);
 
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -103,7 +116,13 @@ export default function Login() {
 
   const buildOAuthURL = (social) => {
     const redirect = query.get('redirect') ? query.get('redirect') : `${basePath}ui/profile`;
-    return `${baseUrl}oauth?type=${encodeURIComponent(social)}&redirect=${encodeURIComponent(redirect)}`;
+    // Get OAuth URL from config
+    const { oauthUrl } = window;
+    const oauthCenterUrl = oauthUrl || 'https://oauth.lzc2002.top';
+    const state = Math.random().toString(36).substring(2, 15);
+    // Store state in sessionStorage for verification
+    sessionStorage.setItem('oauth_state', state);
+    return `${oauthCenterUrl}/${social}?redirect=${encodeURIComponent(`${baseUrl}oauth?redirect=${encodeURIComponent(redirect)}`)}&state=${state}`;
   };
 
   return (
@@ -180,11 +199,16 @@ export default function Login() {
             </p>
           </form>
           <div className="social-accounts">
-            {socials.map((social) => (
-              <a key={social} href={buildOAuthURL(social)}>
-                {React.createElement(Icons[social])}
-              </a>
-            ))}
+            {socials.map((social) => {
+              const iconKey = social.replace(/-/g, '_');
+              return (
+                <a key={social} href={buildOAuthURL(social)}>
+                  {Icons[iconKey]
+                    ? React.createElement(Icons[iconKey])
+                    : React.createElement(Icons.fallback, { name: social })}
+                </a>
+              );
+            })}
           </div>
 
           <p className="more-link">

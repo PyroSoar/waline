@@ -38,6 +38,7 @@ module.exports = class BaseLogic extends think.Logic {
       return;
     }
 
+    const oauthServices = this.ctx.state.oauthServices || [];
     const user = await this.modelInstance.select(
       { objectId: userId, type: ['!=', 'banned'] },
       {
@@ -50,7 +51,7 @@ module.exports = class BaseLogic extends think.Logic {
           'avatar',
           '2fa',
           'label',
-          ...this.ctx.state.oauthServices.map(({ name }) => name),
+          ...oauthServices.map(({ name }) => name),
         ],
       },
     );
@@ -103,7 +104,8 @@ module.exports = class BaseLogic extends think.Logic {
 
     secureDomains = think.isArray(secureDomains) ? secureDomains : [secureDomains];
     secureDomains.push('localhost', '127.0.0.1');
-    secureDomains = [...secureDomains, ...this.ctx.state.oauthServices.map(({ origin }) => origin)];
+    const oauthServices = this.ctx.state.oauthServices || [];
+    secureDomains = [...secureDomains, ...oauthServices.map(({ origin }) => origin)];
 
     // 转换可能的正则表达式字符串为正则表达式对象
     secureDomains = secureDomains

@@ -32,13 +32,16 @@ div[tabindex='-1'] {
   display: block;
 }
 
-.account-item.github path,
-.account-item.twitter circle,
-.account-item.facebook path,
-.account-item.weibo circle,
-.account-item.qq path,
-.account-item.oidc path,
-.account-item.huawei path {
+.account-item.github:not(.bind) path,
+.account-item.twitter:not(.bind) circle,
+.account-item.facebook:not(.bind) path,
+.account-item.weibo:not(.bind) circle,
+.account-item.qq:not(.bind) path,
+.account-item.google:not(.bind) path:not(:last-of-type),
+.account-item.oidc:not(.bind) path,
+.account-item.huawei:not(.bind) path,
+.account-item.steam:not(.bind) path,
+.account-item.microsoft-consumers:not(.bind) path {
   fill: #808080;
 }
 
@@ -75,6 +78,11 @@ div[tabindex='-1'] {
 .account-item.huawei:hover path,
 .account-item.huawei.bind path {
   fill: #f00;
+}
+
+.account-item.steam:hover path,
+.account-item.steam.bind path {
+  fill: rgb(0, 73, 134);
 }
 
 .user-page-account-item {

@@ -80,6 +80,13 @@ if (storage === null) {
   throw new Error('No valid storage found. Please check your environment variables.');
 }
 
+// Ensure jwtKey is set for SQLite storage or when no other password is provided
+if (!jwtKey) {
+  throw new Error(
+    'JWT_TOKEN is required but not set. Please set JWT_TOKEN environment variable.',
+  );
+}
+
 if (think.env === 'cloudbase' && storage === 'sqlite') {
   throw new Error("You can't use SQLite in CloudBase platform.");
 }

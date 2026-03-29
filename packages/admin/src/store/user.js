@@ -13,20 +13,25 @@ export const user = {
   },
   effects: (dispatch) => ({
     async loadUserInfo() {
-      const user = await getUserInfo();
+      try {
+        const user = await getUserInfo();
 
-      if (!user?.objectId) {
-        return;
+        if (!user?.objectId) {
+          return;
+        }
+        if (window.opener) {
+          const localToken = localStorage.getItem('TOKEN');
+          const remember = Boolean(localToken);
+          const token = localToken ?? window.TOKEN ?? sessionStorage.getItem('token');
+
+          window.opener.postMessage({ type: 'userInfo', data: { token, remember, ...user } }, '*');
+        }
+
+        return dispatch.user.setUser(user);
+      } catch (e) {
+        // Silently ignore auth errors - user is not logged in
+        console.log('Not authenticated');
       }
-      if (window.opener) {
-        const localToken = localStorage.getItem('TOKEN');
-        const remember = Boolean(localToken);
-        const token = localToken ?? window.TOKEN ?? sessionStorage.getItem('token');
-
-        window.opener.postMessage({ type: 'userInfo', data: { token, remember, ...user } }, '*');
-      }
-
-      return dispatch.user.setUser(user);
     },
     async login({ email, password, code, remember, recaptchaV3, turnstile }) {
       const { token, ...user } = await login({
